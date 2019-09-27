@@ -35,7 +35,7 @@ def decrypt_caesar(ciphertext: str) -> str:
     for symbol in ciphertext:
         if ord(symbol) in range(68, 91) or ord(symbol) in range(100, 123):
             plaintext = plaintext + chr(ord(symbol)-3)
-        elif ord(symbol) in range(65,68) or ord(symbol) in range(97,100):
+        elif ord(symbol) in range(65, 68) or ord(symbol) in range(97, 100):
             plaintext = plaintext + chr(ord(symbol)+23)
         else:
             plaintext = plaintext + chr(ord(symbol))
