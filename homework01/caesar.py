@@ -9,10 +9,17 @@ def encrypt_caesar(plaintext: str) -> str:
     >>> encrypt_caesar("")
     ''
     """
-    # PUT YOUR CODE HERE
+    ciphertext = ''
+    for symbol in plaintext:
+        if ord(symbol) in range(65, 88) or ord(symbol) in range(97, 120):
+            ciphertext = ciphertext + chr(ord(symbol)+3)
+        elif ord(symbol) in range(88, 91) or ord(symbol) in range(120, 123):
+            ciphertext = ciphertext + chr(ord(symbol)-23)
+        else:
+            ciphertext = ciphertext + chr(ord(symbol))
     return ciphertext
 
-
+    
 def decrypt_caesar(ciphertext: str) -> str:
     """
     >>> decrypt_caesar("SBWKRQ")
