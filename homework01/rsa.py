@@ -1,3 +1,5 @@
+from typing import Tuple
+
 def is_prime(n: int) -> bool:
     """
     >>> is_prime(2)
@@ -20,7 +22,7 @@ def is_prime(n: int) -> bool:
             is_prime = False
         else:
             is_prime = True
-    pass
+    return is_prime
 
 def gcd(a: int, b: int) -> int:
     """
@@ -29,7 +31,7 @@ def gcd(a: int, b: int) -> int:
     >>> gcd(3, 7)
     1
     """
-    while a != b and a != 0 and b != 0:
+    while a != 0 and b != 0:
         if a > b:
             a = a % b
         elif b > a:
@@ -38,7 +40,31 @@ def gcd(a: int, b: int) -> int:
         gcd = b
     else:
         gcd = a
-    pass    
+    return gcd
+
+def multiplicative_inverse(e: int, phi: int) -> int:
+    """
+    >>> multiplicative_inverse(7, 40)
+    23
+    """
+    div = []
+    phi1 = phi
+    while e!=0 and phi!=0:
+        if e > phi:
+            div.append(e // phi)
+            e = e % phi
+        else:
+            div.append(phi // e)
+            phi = phi % e
+    dl = len(div) - 1
+    x = 1
+    y = 0
+    for i in range(dl):
+        y1 = y
+        y = x
+        x = y1 - x * div[dl-i-1]
+    multiplicative_inverse = x % phi1
+    return multiplicative_inverse
 
 def generate_keypair(p: int, q: int) -> Tuple[Tuple[int, int], Tuple[int, int]]:
     if not (is_prime(p) and is_prime(q)):
