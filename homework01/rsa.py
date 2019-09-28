@@ -1,5 +1,6 @@
 from typing import Tuple
 
+
 def is_prime(n: int) -> bool:
     """
     >>> is_prime(2)
@@ -24,6 +25,7 @@ def is_prime(n: int) -> bool:
             is_prime = True
     return is_prime
 
+
 def gcd(a: int, b: int) -> int:
     """
     >>> gcd(12, 15)
@@ -42,6 +44,7 @@ def gcd(a: int, b: int) -> int:
         gcd = a
     return gcd
 
+
 def multiplicative_inverse(e: int, phi: int) -> int:
     """
     >>> multiplicative_inverse(7, 40)
@@ -49,7 +52,7 @@ def multiplicative_inverse(e: int, phi: int) -> int:
     """
     div = []
     phi1 = phi
-    while e!=0 and phi!=0:
+    while e != 0 and phi != 0:
         if e > phi:
             div.append(e // phi)
             e = e % phi
@@ -65,6 +68,7 @@ def multiplicative_inverse(e: int, phi: int) -> int:
         x = y1 - x * div[dl-i-1]
     multiplicative_inverse = x % phi1
     return multiplicative_inverse
+
 
 def generate_keypair(p: int, q: int) -> Tuple[Tuple[int, int], Tuple[int, int]]:
     if not (is_prime(p) and is_prime(q)):
