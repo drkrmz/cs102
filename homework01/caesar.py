@@ -11,9 +11,9 @@ def encrypt_caesar(plaintext: str) -> str:
     """
     ciphertext = ''
     for symbol in plaintext:
-        if ord(symbol) in range(65, 88) or ord(symbol) in range(97, 120):
+        if "A" <= symbol <= "W" or "a" <= symbol <= "w":
             ciphertext = ciphertext + chr(ord(symbol)+3)
-        elif ord(symbol) in range(88, 91) or ord(symbol) in range(120, 123):
+        elif "X" <= symbol <= "Z" or "x" <= symbol <= "z":
             ciphertext = ciphertext + chr(ord(symbol)-23)
         else:
             ciphertext = ciphertext + chr(ord(symbol))
@@ -33,9 +33,9 @@ def decrypt_caesar(ciphertext: str) -> str:
     """
     plaintext = ''
     for symbol in ciphertext:
-        if ord(symbol) in range(68, 91) or ord(symbol) in range(100, 123):
+        if "D" <= symbol <= "Z" or "d" <= symbol <= "z":
             plaintext = plaintext + chr(ord(symbol)-3)
-        elif ord(symbol) in range(65, 68) or ord(symbol) in range(97, 100):
+        elif "A" <= symbol <= "C" or "a" <= symbol <= "c":
             plaintext = plaintext + chr(ord(symbol)+23)
         else:
             plaintext = plaintext + chr(ord(symbol))
