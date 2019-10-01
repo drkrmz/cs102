@@ -11,11 +11,14 @@ def is_prime(n: int) -> bool:
     False
     """
     prime = 0
-    factor = 2
-    while factor * factor < n and prime == 0:
-        if n % factor == 0:
-            prime = 1
-        factor = factor + 1
+    if n % 2 == 0 and n != 2 or n == 1:
+        prime = 1
+    else:
+        factor = 3
+        while factor * factor <= n and prime == 0:
+            if n % factor == 0:
+                prime = 1
+            factor = factor + 2
     if prime == 1:
         return False
     else:
