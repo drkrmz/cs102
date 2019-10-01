@@ -10,20 +10,16 @@ def is_prime(n: int) -> bool:
     >>> is_prime(8)
     False
     """
-    prost = 0
-    if n % 2 == 0 and n != 2:
-        is_prime = False
+    prime = 0
+    factor = 2
+    while factor * factor < n and prime == 0:
+        if n % factor == 0:
+            prime = 1
+        factor = factor + 1
+    if prime == 1:
+        return False
     else:
-        factor = 3
-        while factor * factor < n and prost == 0:
-            if n % factor == 0:
-                prost = 1
-            factor = factor + 2
-        if prost == 1:
-            is_prime = False
-        else:
-            is_prime = True
-    return is_prime
+        return True
 
 
 def gcd(a: int, b: int) -> int:
@@ -38,11 +34,7 @@ def gcd(a: int, b: int) -> int:
             a = a % b
         elif b > a:
             b = b % a
-    if a == 0:
-        gcd = b
-    else:
-        gcd = a
-    return gcd
+    return a + b
 
 
 def multiplicative_inverse(e: int, phi: int) -> int:
@@ -59,15 +51,14 @@ def multiplicative_inverse(e: int, phi: int) -> int:
         else:
             div.append(phi // e)
             phi = phi % e
-    dl = len(div) - 1
+    length = len(div) - 1
     x = 1
     y = 0
-    for i in range(dl):
+    for i in range(length):
         y1 = y
         y = x
-        x = y1 - x * div[dl-i-1]
-    multiplicative_inverse = x % phi1
-    return multiplicative_inverse
+        x = y1 - x * div[length-i-1]
+    return x % phi1
 
 
 def generate_keypair(p: int, q: int) -> Tuple[Tuple[int, int], Tuple[int, int]]:
