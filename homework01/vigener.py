@@ -12,16 +12,16 @@ def encrypt_vigenere(plaintext: str, keyword: str) -> str:
     while i < len(plaintext):
         symbol = plaintext[i]
         shift = keyword[i % len(keyword)]
-        if ord(shift) in range(65, 91):
-            if ord(symbol)+ord(shift)-65 < 91:
-                ciphertext = ciphertext + chr(ord(shift)+ord(symbol)-65)
+        if "A" <= shift <= "Z":
+            if ord(symbol)+ord(shift)-ord("A") <= ord("Z"):
+                ciphertext = ciphertext + chr(ord(shift)+ord(symbol)-ord("A"))
             else:
-                ciphertext = ciphertext + chr(ord(shift)+ord(symbol)-65-26)
+                ciphertext = ciphertext + chr(ord(shift)+ord(symbol)-ord("A")-26)
         else:
-            if ord(symbol)+ord(shift)-97 < 123:
-                ciphertext = ciphertext + chr(ord(shift)+ord(symbol)-97)
+            if ord(symbol)+ord(shift)-ord("a") <= ord("z"):
+                ciphertext = ciphertext + chr(ord(shift)+ord(symbol)-ord("a"))
             else:
-                ciphertext = ciphertext + chr(ord(shift)+ord(symbol)-97-26)
+                ciphertext = ciphertext + chr(ord(shift)+ord(symbol)-ord("a")-26)
         i = i + 1
     return ciphertext
 
@@ -40,15 +40,15 @@ def decrypt_vigenere(ciphertext: str, keyword: str) -> str:
     while i < len(ciphertext):
         symbol = ciphertext[i]
         shift = keyword[i % len(keyword)]
-        if ord(shift) in range(65, 91):
-            if ord(symbol)-ord(shift)+65 > 64:
-                plaintext = plaintext + chr(ord(symbol)-ord(shift)+65)
+        if "A" <= symbol <= "Z":
+            if ord(symbol)-ord(shift)+ord("A") >= ord("A"):
+                plaintext = plaintext + chr(ord(symbol)-ord(shift)+ord("A"))
             else:
-                plaintext = plaintext + chr(ord(symbol)-ord(shift)+65+26)
+                plaintext = plaintext + chr(ord(symbol)-ord(shift)+ord("A")+26)
         else:
-            if ord(symbol)-ord(shift)+97 > 96:
-                plaintext = plaintext + chr(ord(symbol)-ord(shift)+97)
+            if ord(symbol)-ord(shift)+ord("a") >= ord("a"):
+                plaintext = plaintext + chr(ord(symbol)-ord(shift)+ord("a"))
             else:
-                plaintext = plaintext + chr(ord(symbol)-ord(shift)+97+26)
+                plaintext = plaintext + chr(ord(symbol)-ord(shift)+ord("a")+26)
         i = i + 1
     return plaintext
