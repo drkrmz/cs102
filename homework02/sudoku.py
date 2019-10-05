@@ -74,7 +74,7 @@ def get_col(grid: List[List[str]], pos: Tuple[int, int]) -> List[str]:
 def get_block(grid: List[List[str]], pos: Tuple[int, int]) -> List[str]:
     """ Возвращает все значения из квадрата, в который попадает позиция pos
 
-    >>> grid = read_sudoku('puzzle1.txt')
+    >>> grid = read_sudoku('homework02/puzzle1.txt')
     >>> get_block(grid, (0, 1))
     ['5', '3', '.', '6', '.', '.', '.', '9', '8']
     >>> get_block(grid, (4, 7))
@@ -82,7 +82,16 @@ def get_block(grid: List[List[str]], pos: Tuple[int, int]) -> List[str]:
     >>> get_block(grid, (8, 8))
     ['2', '8', '.', '.', '.', '5', '.', '7', '9']
     """
-    pass
+    row, col = pos
+    block = []
+    while row % 3 != 0:
+        row = row - 1
+    while col % 3 != 0:
+        col = col - 1
+    for i in range(row, row+3):
+        for j in range(col, col+3):
+            block.append(grid[i][j])
+    return block
 
 
 def find_empty_positions(grid: List[List[str]]) -> Optional[Tuple[int, int]]:
