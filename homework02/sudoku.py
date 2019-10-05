@@ -113,7 +113,7 @@ def find_empty_positions(grid: List[List[str]]) -> Optional[Tuple[int, int]]:
 def find_possible_values(grid: List[List[str]], pos: Tuple[int, int]) -> Set[str]:
     """ Вернуть множество возможных значения для указанной позиции
 
-    >>> grid = read_sudoku('puzzle1.txt')
+    >>> grid = read_sudoku('homework02/puzzle1.txt')
     >>> values = find_possible_values(grid, (0,2))
     >>> values == {'1', '2', '4'}
     True
@@ -121,7 +121,16 @@ def find_possible_values(grid: List[List[str]], pos: Tuple[int, int]) -> Set[str
     >>> values == {'2', '5', '9'}
     True
     """
-    pass
+    values = set()
+    row = get_row(grid, pos)
+    col = get_col(grid, pos)
+    block = get_block(grid, pos)
+    i = '1'
+    while i <= '9':
+        if (i in row) == False and (i in col) == False and (i in block) == False:
+            values.add(i)
+        i = chr(ord(i)+1)
+    return values
 
 
 def solve(grid: List[List[str]]) -> Optional[List[List[str]]]:
