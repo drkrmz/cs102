@@ -140,17 +140,55 @@ def solve(grid: List[List[str]]) -> Optional[List[List[str]]]:
             3.1. Поместить это значение на эту позицию
             3.2. Продолжить решать оставшуюся часть пазла
 
-    >>> grid = read_sudoku('puzzle1.txt')
+    >>> grid = read_sudoku('homework02/puzzle1.txt')
     >>> solve(grid)
     [['5', '3', '4', '6', '7', '8', '9', '1', '2'], ['6', '7', '2', '1', '9', '5', '3', '4', '8'], ['1', '9', '8', '3', '4', '2', '5', '6', '7'], ['8', '5', '9', '7', '6', '1', '4', '2', '3'], ['4', '2', '6', '8', '5', '3', '7', '9', '1'], ['7', '1', '3', '9', '2', '4', '8', '5', '6'], ['9', '6', '1', '5', '3', '7', '2', '8', '4'], ['2', '8', '7', '4', '1', '9', '6', '3', '5'], ['3', '4', '5', '2', '8', '6', '1', '7', '9']]
     """
-    pass
+    pos = find_empty_positions(grid)
+    if pos is None:
+        return grid
+    row, col = pos
+    values = find_possible_values(grid, pos)
+    for i in values:
+        grid[row][col] = i                 
+        solve(grid)
+        if find_empty_positions(grid) is not None:
+            grid[row][col] = '.'
+        else:
+            return grid
 
 
 def check_solution(solution: List[List[str]]) -> bool:
     """ Если решение solution верно, то вернуть True, в противном случае False """
     # TODO: Add doctests with bad puzzles
-    pass
+    for i in range(9):
+        pos = (0, i)
+        in_row = set()
+        row = get_row(solution, pos)
+        for j in range(9):
+            if row[j] in in_row:
+                return False
+            else:
+                in_row.add(row[j])
+        pos = (i, 0)
+        in_col = set()
+        col = get_col(solution, pos)
+        for j in range(9):
+            if col[j] in in_col:
+                return False
+            else:
+                in_col.add(col[j])
+    for i in range(9):
+        for j in range(9):
+            pos = (i, j)
+            in_block = set()
+            block = get_block(solution, pos)
+            for k in range(9):
+                if block[k] in in_block:
+                    return False
+                else:
+                    in_block.add(block[k])
+    return True
 
 
 def generate_sudoku(N: int) -> List[List[str]]:
@@ -174,12 +212,12 @@ def generate_sudoku(N: int) -> List[List[str]]:
     >>> solution = solve(grid)
     >>> check_solution(solution)
     True
-    """
-    pass
+    """ 
+    pass    
 
 
 if __name__ == '__main__':
-    for fname in ['puzzle1.txt', 'puzzle2.txt', 'puzzle3.txt']:
+    for fname in ['homework02/puzzle1.txt', 'homework02/puzzle2.txt', 'homework02/puzzle3.txt']:
         grid = read_sudoku(fname)
         display(grid)
         solution = solve(grid)
