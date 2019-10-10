@@ -1,3 +1,4 @@
+import random
 from typing import Tuple, List, Set, Optional
 
 
@@ -68,7 +69,6 @@ def get_col(grid: List[List[str]], pos: Tuple[int, int]) -> List[str]:
     for i in range(len(grid)):
         grid_1.append(grid[i][col])
     return grid_1
-
 
 
 def get_block(grid: List[List[str]], pos: Tuple[int, int]) -> List[str]:
@@ -212,8 +212,27 @@ def generate_sudoku(N: int) -> List[List[str]]:
     >>> solution = solve(grid)
     >>> check_solution(solution)
     True
-    """ 
-    pass    
+    """
+    grid = []
+    for i in range(9):
+        grid.append([])
+        for j in range(9):
+            grid[i].append((int(i*3 + i/3 + j)) % 9 + 1)
+    grid = list(zip(*grid))
+    for i in range(9):
+        grid[i] = list(grid[i])
+    row1 = random.randint(0, 8)
+    row2 = random.randint(0, 8)
+    grid[row1], grid[row2] = grid[row2], grid[row1]
+    N = 81 - N
+    while N > 0:
+        row = random.randint(0, 8)
+        col = random.randint(0, 8)
+        pos = row, col
+        if grid[row][col] != '.':
+            grid[row][col] = '.'
+            N = N - 1
+    return(grid)   
 
 
 if __name__ == '__main__':
