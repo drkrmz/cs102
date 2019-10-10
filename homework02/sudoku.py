@@ -125,7 +125,7 @@ def find_possible_values(grid: List[List[str]], pos: Tuple[int, int]) -> Set[str
     block = get_block(grid, pos)
     i = '1'
     while i <= '9':
-        if (i in row) == False and (i in col) == False and (i in block) == False:
+        if not (i in row) and not (i in col) and not (i in block):
             values.add(i)
         i = chr(ord(i)+1)
     return values
@@ -150,7 +150,7 @@ def solve(grid: List[List[str]]) -> Optional[List[List[str]]]:
     row, col = pos
     values = find_possible_values(grid, pos)
     for i in values:
-        grid[row][col] = i                 
+        grid[row][col] = i
         solve(grid)
         if find_empty_positions(grid) is not None:
             grid[row][col] = '.'
@@ -232,7 +232,7 @@ def generate_sudoku(N: int) -> List[List[str]]:
         if grid[row][col] != '.':
             grid[row][col] = '.'
             N = N - 1
-    return(grid)   
+    return grid
 
 
 if __name__ == '__main__':
