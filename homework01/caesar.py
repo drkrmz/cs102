@@ -1,4 +1,4 @@
-def encrypt_caesar(plaintext: str) -> str:
+def encrypt_caesar(plaintext: str, shift: int) -> str:
     """
     >>> encrypt_caesar("PYTHON")
     'SBWKRQ'
@@ -11,16 +11,17 @@ def encrypt_caesar(plaintext: str) -> str:
     """
     ciphertext = ''
     for symbol in plaintext:
-        if "A" <= symbol <= "W" or "a" <= symbol <= "w":
-            ciphertext = ciphertext + chr(ord(symbol)+3)
-        elif "X" <= symbol <= "Z" or "x" <= symbol <= "z":
-            ciphertext = ciphertext + chr(ord(symbol)-23)
+        if "A" <= symbol <= "Z" or "a" <= symbol <= "z":
+            if ord('Z') < ord(symbol) + shift < ord('a') or ord(symbol) + shift > ord('z'):
+                ciphertext = ciphertext + chr(ord(symbol) + shift - 26)
+            else:
+                ciphertext = ciphertext + chr(ord(symbol) + shift)
         else:
             ciphertext = ciphertext + chr(ord(symbol))
     return ciphertext
 
 
-def decrypt_caesar(ciphertext: str) -> str:
+def decrypt_caesar(ciphertext: str, shift: int) -> str:
     """
     >>> decrypt_caesar("SBWKRQ")
     'PYTHON'
@@ -33,10 +34,11 @@ def decrypt_caesar(ciphertext: str) -> str:
     """
     plaintext = ''
     for symbol in ciphertext:
-        if "D" <= symbol <= "Z" or "d" <= symbol <= "z":
-            plaintext = plaintext + chr(ord(symbol)-3)
-        elif "A" <= symbol <= "C" or "a" <= symbol <= "c":
-            plaintext = plaintext + chr(ord(symbol)+23)
+        if "A" <= symbol <= "Z" or "a" <= symbol <= "z":
+            if ord('Z') < ord(symbol) - shift < ord('a') or ord(symbol) - shift < ord('A'):
+                plaintext = plaintext + chr(ord(symbol)- shift + 26)
+            else:
+                plaintext = plaintext + chr(ord(symbol) - shift)
         else:
             plaintext = plaintext + chr(ord(symbol))
     return plaintext
