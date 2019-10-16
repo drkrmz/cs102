@@ -221,9 +221,10 @@ def generate_sudoku(N: int) -> List[List[str]]:
     grid = list(zip(*grid))
     for i in range(9):
         grid[i] = list(grid[i])
-    row1 = random.randint(0, 8)
-    row2 = random.randint(0, 8)
-    grid[row1], grid[row2] = grid[row2], grid[row1]
+    for i in range(0, 6, 3):
+        row1 = random.randint(i, i+2)
+        row2 = random.randint(i, i+2)
+        grid[row1], grid[row2] = grid[row2], grid[row1]
     N = 81 - N
     while N > 0:
         row = random.randint(0, 8)
