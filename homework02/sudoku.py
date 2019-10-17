@@ -106,6 +106,7 @@ def find_empty_positions(grid: List[List[str]]) -> Optional[Tuple[int, int]]:
         for j in range(len(grid[i])):
             if grid[i][j] == '.':
                 return (i, j)
+    return None
 
 
 def find_possible_values(grid: List[List[str]], pos: Tuple[int, int]) -> Set[str]:
@@ -156,6 +157,7 @@ def solve(grid: List[List[str]]) -> Optional[List[List[str]]]:
             grid[row][col] = '.'
         else:
             return grid
+    return None
 
 
 def check_solution(solution: List[List[str]]) -> bool:
@@ -163,7 +165,7 @@ def check_solution(solution: List[List[str]]) -> bool:
     # TODO: Add doctests with bad puzzles
     for i in range(9):
         pos = (0, i)
-        in_row = set()
+        in_row: Set[str] = set()
         row = get_row(solution, pos)
         for j in range(9):
             if row[j] in in_row:
@@ -171,7 +173,7 @@ def check_solution(solution: List[List[str]]) -> bool:
             else:
                 in_row.add(row[j])
         pos = (i, 0)
-        in_col = set()
+        in_col: Set[str] = set()
         col = get_col(solution, pos)
         for j in range(9):
             if col[j] in in_col:
@@ -181,7 +183,7 @@ def check_solution(solution: List[List[str]]) -> bool:
     for i in range(9):
         for j in range(9):
             pos = (i, j)
-            in_block = set()
+            in_block: Set[str] = set()
             block = get_block(solution, pos)
             for k in range(9):
                 if block[k] in in_block:
@@ -213,14 +215,11 @@ def generate_sudoku(N: int) -> List[List[str]]:
     >>> check_solution(solution)
     True
     """
-    grid = []
+    grid: List[List[str]] = []
     for i in range(9):
         grid.append([])
         for j in range(9):
-            grid[i].append((int(i*3 + i/3 + j)) % 9 + 1)
-    grid = list(zip(*grid))
-    for i in range(9):
-        grid[i] = list(grid[i])
+            grid[i].append(str((int(i*3 + i/3 + j)) % 9 + 1))
     for i in range(0, 6, 3):
         row1 = random.randint(i, i+2)
         row2 = random.randint(i, i+2)
