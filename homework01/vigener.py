@@ -13,15 +13,17 @@ def encrypt_vigenere(plaintext: str, keyword: str) -> str:
         symbol = plaintext[i]
         shift = keyword[i % len(keyword)]
         if "A" <= shift <= "Z":
+            code_symbol = ord(symbol) + ord(shift) - ord("A")
             if ord(symbol)+ord(shift)-ord("A") <= ord("Z"):
-                ciphertext = ciphertext + chr(ord(shift)+ord(symbol)-ord("A"))
+                ciphertext = ciphertext + chr(code_symbol)
             else:
-                ciphertext = ciphertext + chr(ord(shift)+ord(symbol)-ord("A")-26)
+                ciphertext = ciphertext + chr(code_symbol - 26)
         else:
-            if ord(symbol)+ord(shift)-ord("a") <= ord("z"):
-                ciphertext = ciphertext + chr(ord(shift)+ord(symbol)-ord("a"))
+            code_symbol = ord(symbol) + ord(shift) - ord("a")
+            if code_symbol <= ord("z"):
+                ciphertext = ciphertext + chr(code_symbol)
             else:
-                ciphertext = ciphertext + chr(ord(shift)+ord(symbol)-ord("a")-26)
+                ciphertext = ciphertext + chr(code_symbol-26)
         i = i + 1
     return ciphertext
 
@@ -41,14 +43,16 @@ def decrypt_vigenere(ciphertext: str, keyword: str) -> str:
         symbol = ciphertext[i]
         shift = keyword[i % len(keyword)]
         if "A" <= symbol <= "Z":
-            if ord(symbol)-ord(shift)+ord("A") >= ord("A"):
-                plaintext = plaintext + chr(ord(symbol)-ord(shift)+ord("A"))
+            code_symbol = ord(symbol) - ord(shift) + ord("A")
+            if code_symbol >= ord("A"):
+                plaintext = plaintext + chr(code_symbol)
             else:
-                plaintext = plaintext + chr(ord(symbol)-ord(shift)+ord("A")+26)
+                plaintext = plaintext + chr(code_symbol + 26)
         else:
-            if ord(symbol)-ord(shift)+ord("a") >= ord("a"):
-                plaintext = plaintext + chr(ord(symbol)-ord(shift)+ord("a"))
+            code_symbol = ord(symbol) - ord(shift) + ord("a")
+            if code_symbol >= ord("a"):
+                plaintext = plaintext + chr(code_symbol)
             else:
-                plaintext = plaintext + chr(ord(symbol)-ord(shift)+ord("a")+26)
+                plaintext = plaintext + chr(code_symbol+26)
         i = i + 1
     return plaintext
