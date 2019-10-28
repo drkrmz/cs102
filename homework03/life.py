@@ -50,7 +50,7 @@ class GameOfLife:
             # Отрисовка списка клеток
             self.draw_cell_list()
             # Выполнение одного шага игры (обновление состояния ячеек)
-
+            self.clist = self.update_cell_list()
 
             pygame.display.flip()
             clock.tick(self.speed)
@@ -125,5 +125,23 @@ class GameOfLife:
         :return: Обновленное игровое поле
         """
         new_clist = []
-        # PUT YOUR CODE HERE
+        temp = []
+        for i in range(self.cell_height):
+            for j in range(self.cell_width):
+                amount = sum(self.get_neighbours((i, j)))
+                if cell_list[i][j] == 0:
+                    if amount == 3:
+                        temp.append(1)
+                    else:
+                         temp.append(0)
+                else:
+                    if amount == 2 or amount == 3:
+                        temp.append(1)
+                    else:
+                         temp.append(0)
+                if j == self.cell_width-1:
+                    new_clist.append(temp)
+                    temp = []
+        self.clist = cell_list
+        self.clist = new_clist
         return self.clist
