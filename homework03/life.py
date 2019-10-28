@@ -64,7 +64,16 @@ class GameOfLife:
         :return: Список клеток, представленный в виде матрицы
         """
         self.clist = []
-        # PUT YOUR CODE HERE
+        temp = []
+        for i in range(self.cell_height):
+            for j in range(self.cell_width):
+                if not randomize:
+                    temp.append(0)
+                else:
+                    temp.append(random.randint(0, 1))
+                if j == self.cell_width - 1:
+                    self.clist.append(temp)
+                    temp = []
         return self.clist
 
     def draw_cell_list(self, clist):
