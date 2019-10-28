@@ -39,18 +39,18 @@ class GameOfLife:
         self.screen.fill(pygame.Color('white'))
 
         # Создание списка клеток
-        
+        self.clist = self.cell_list(randomize=True)
 
         running = True
         while running:
             for event in pygame.event.get():
                 if event.type == QUIT:
                     running = False
-            self.draw_grid()
 
             # Отрисовка списка клеток
+            self.draw_cell_list()
             # Выполнение одного шага игры (обновление состояния ячеек)
-            # PUT YOUR CODE HERE
+
 
             pygame.display.flip()
             clock.tick(self.speed)
@@ -81,7 +81,13 @@ class GameOfLife:
 
         :param rects: Список клеток для отрисовки, представленный в виде матрицы
         """
-        pass
+        for i in range(self.cell_height):
+            for j in range(self.cell_width):
+                if clist[i][j] == 1: 
+                    pygame.draw.rect(self.screen, pygame.color('Green'), (j, i, 64, 48))
+                else:
+                    pygame.draw.rect(self.screen, pygame.color('Black'), (j, i, 64, 48))
+        
 
     def get_neighbours(self, cell):
         """ Вернуть список соседей для указанной ячейки
@@ -90,7 +96,23 @@ class GameOfLife:
         :return: Одномерный список ячеек, смежных к ячейке cell
         """
         neighbours = []
-        # PUT YOUR CODE HERE
+        row, col = cell
+        if row-1 >= 0:
+            if col-1 >= 0:
+                neighbours.append(self.clist[row-1][col-1])
+            if col+1 <= self.cell_width-1:
+                neighbours.append(self.clist[row-1][col+1])
+            neighbours.append(self.clist[row-1][col])
+        if row+1 <= self.cell_height-1:
+            if col-1 >= 0:
+                neighbours.append(self.clist[row+1][col-1])
+            if col+1 <= self.cell_width-1:
+                neighbours.append(self.clist[row+1][col+1])
+            neighbours.append(self.clist[row+1][col])
+        if col-1 >= 0:
+            neighbours.append(self.clist[row][col-1])
+        if col+1 <= self.cell_width-1:
+            neighbours.append(self.clist[row][col+1])
         return neighbours
 
     def update_cell_list(self, cell_list):
