@@ -83,11 +83,10 @@ class GameOfLife:
         """
         for i in range(self.cell_height):
             for j in range(self.cell_width):
-                if clist[i][j] == 1: 
+                if clist[i][j] == 1:
                     pygame.draw.rect(self.screen, pygame.color('Green'), (j, i, 64, 48))
                 else:
                     pygame.draw.rect(self.screen, pygame.color('Black'), (j, i, 64, 48))
-        
 
     def get_neighbours(self, cell):
         """ Вернуть список соседей для указанной ячейки
@@ -133,12 +132,12 @@ class GameOfLife:
                     if amount == 3:
                         temp.append(1)
                     else:
-                         temp.append(0)
+                        temp.append(0)
                 else:
                     if amount == 2 or amount == 3:
                         temp.append(1)
                     else:
-                         temp.append(0)
+                        temp.append(0)
                 if j == self.cell_width-1:
                     new_clist.append(temp)
                     temp = []
