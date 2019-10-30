@@ -121,7 +121,7 @@ class GameOfLife:
             ff = json.load(f)
         rows = len(ff)
         cols = len(ff[0])
-        game = GameOfLife(size = (rows, cols), randomize = True)
+        game = GameOfLife(size=(rows, cols), randomize=True)
         game.curr_generation = ff
         return game
 
