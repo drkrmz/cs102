@@ -118,7 +118,12 @@ class GameOfLife:
         Прочитать состояние клеток из указанного файла.
         """
         with open(filename, 'r') as f:
-            json.load(f)
+            ff = json.load(f)
+        rows = len(ff)
+        cols = len(ff[0])
+        game = GameOfLife(size = (rows, cols), randomize = True)
+        game.curr_generation = ff
+        return game
 
     def save(self, filename: pathlib.Path) -> None:
         """

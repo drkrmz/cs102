@@ -166,3 +166,7 @@ class GameOfLife:
                     temp = []
         self.grid = new_grid
         return self.grid
+
+if __name__ == '__main__':
+    game = GameOfLife()
+    game.run()
