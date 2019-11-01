@@ -10,8 +10,8 @@ class GUI(UI):
     def __init__(self, life: GameOfLife, cell_size: int = 10, speed: int = 10) -> None:
         self.cell_size = cell_size
         self.speed = speed
-        self.screen = pygame.display.set_mode((self.life.cols * self.cell_size, self.life.rows * self.cell_size))
-        super().__init__(self.life)
+        self.screen = pygame.display.set_mode((life.cols * self.cell_size, life.rows * self.cell_size))
+        super().__init__(life)
 
     def draw_lines(self) -> None:
         """ Отрисовать сетку """
