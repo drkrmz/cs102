@@ -2,8 +2,9 @@ import requests
 import config
 import telebot
 from bs4 import BeautifulSoup
+from typing import List, Tuple
 
-
+telebot.apihelper.proxy = {'https': 'https://23.237.22.172:3128'}
 bot = telebot.TeleBot(config.access_token)
 
 
@@ -20,7 +21,7 @@ def get_page(group, week=''):
 
 
 def parse_schedule_for_a_monday(web_page):
-    soup = BeautifulSoup(web_page, "html5lib")
+    soup = BeautifulSoup(web_page, "html.parser")
 
     # Получаем таблицу с расписанием на понедельник
     schedule_table = soup.find("table", attrs={"id": "1day"})
