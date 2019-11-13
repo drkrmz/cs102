@@ -4,7 +4,7 @@ import telebot
 from bs4 import BeautifulSoup
 from typing import List, Tuple
 
-telebot.apihelper.proxy = {'https': 'https://23.237.22.172:3128'}
+telebot.apihelper.proxy = {'socks5h': 'https://167.86.121.208:40065'}
 bot = telebot.TeleBot(config.access_token)
 
 
@@ -22,9 +22,11 @@ def get_page(group, week=''):
 
 def parse_schedule_for_a_monday(web_page):
     soup = BeautifulSoup(web_page, "html.parser")
+    schedule_table = ''
 
     # Получаем таблицу с расписанием на понедельник
     schedule_table = soup.find("table", attrs={"id": "1day"})
+    print(schedule_table)
 
     # Время проведения занятий
     times_list = schedule_table.find_all("td", attrs={"class": "time"})
@@ -58,8 +60,40 @@ def get_monday(message):
 @bot.message_handler(commands=['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'])
 def get_schedule(message):
     """ Получить расписание на указанный день """
-    # PUT YOUR CODE HERE
-    pass
+    day, group = message.text.split()
+    if day == '/monday' or day == '/sunday':
+        day = '1day'
+    elif day == '/tuesday':
+        day = '2day'
+    elif day == '/wednesday':
+        day = '3day'
+    elif day == '/thursday':
+        day = '4day'
+    elif day == '/friday':
+        day = '5day'
+    else:
+        day = '6day'
+
+    web_page = get_page(group)
+    soup = BeautifulSoup(web_page, "html.parser")
+    schedule_table = ''
+
+    schedule_table = soup.find("table", attrs={"id": day})
+
+    times_list = schedule_table.find_all("td", attrs={"class": "time"})
+    times_list = [time.span.text for time in times_list]
+
+    locations_list = schedule_table.find_all("td", attrs={"class": "room"})
+    locations_list = [room.span.text for room in locations_list]
+
+    lessons_list = schedule_table.find_all("td", attrs={"class": "lesson"})
+    lessons_list = [lesson.text.split('\n\n') for lesson in lessons_list]
+    lessons_list = [', '.join([info for info in lesson_info if info]) for lesson_info in lessons_list]
+
+    resp = ''
+    for time, location, lession in zip(times_list, locations_list, lessons_list):
+        resp += '<b>{}</b>, {}, {}\n'.format(time, location, lession)
+    bot.send_message(message.chat.id, resp, parse_mode='HTML')
 
 
 @bot.message_handler(commands=['near'])
