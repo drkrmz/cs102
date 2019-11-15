@@ -5,7 +5,7 @@ from bs4 import BeautifulSoup
 from typing import List, Tuple
 import datetime
 
-telebot.apihelper.proxy = {'https': 'https://45.71.113.187:3128'}
+telebot.apihelper.proxy = {'https': 'https://159.12.192.13:10254'}
 bot = telebot.TeleBot(config.access_token)
 
 
@@ -19,6 +19,7 @@ def get_page(group, week):
     response = requests.get(url)
     web_page = response.text
     return web_page
+
 
 def schedule(soup, day):
     schedule_table = soup.find("table", attrs={"id": day})
@@ -34,7 +35,8 @@ def schedule(soup, day):
         lessons_list = schedule_table.find_all("td", attrs={"class": "lesson"})
         lessons_list = [lesson.text.split('\n\n') for lesson in lessons_list]
         lessons_list = [', '.join([info for info in lesson_info if info]) for lesson_info in lessons_list]
-    return(times_list, locations_list, lessons_list)
+    return times_list, locations_list, lessons_list
+
 
 @bot.message_handler(commands=['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'])
 def get_schedule(message):
@@ -68,18 +70,51 @@ def get_schedule(message):
 def get_near_lesson(message):
     """ Получить ближайшее занятие """
     weekday = datetime.datetime.isoweekday(datetime.datetime.now())
-    time = datetime.datetime.now().time()
     _, group, week = message.text.split()
     web_page = get_page(group, week)
     soup = BeautifulSoup(web_page, "html5lib")
-    next_day = 0
     day = str(weekday)+'day'
+    weekdays = {1: 'Понедельник', 2: 'Вторник', 3: 'Среда', 4: 'Четверг', 5: 'Пятница', 6: 'Суббота', 7: 'Воскресенье'}
     times_list, locations_list, lessons_list = schedule(soup, day)
-    hours_lst = [[]]
-    minutes_lst = [[]]
-         
-
-    
+    if times_list is None:
+        while times_list is None:
+            weekday += 1
+            if weekday > 7:
+                weekday = 1
+            day = str(weekday)+'day'
+            times_list, locations_list, lessons_list = schedule(soup, day)
+            x = 0
+    else:
+        time = datetime.datetime.now().time()
+        hours = []
+        minutes = []
+        for i in range(len(times_list)):
+            hours.append(int(times_list[i][0]+times_list[i][1]))
+            minutes.append(int(times_list[i][3]+times_list[i][4]))
+        if time.hour > hours[len(hours)-1] or time.hour == hours[len(hours)-1] and time.minute >= minutes[len(minutes)-1]:
+            weekday += 1
+            day = str(weekday)+'day'
+            times_list, locations_list, lessons_list = schedule(soup, day)
+            if times_list is None:
+                while times_list is None:
+                    weekday += 1
+                    if weekday > 7:
+                        weekday = 1
+                    day = str(weekday)+'day'
+                    times_list, locations_list, lessons_list = schedule(soup, day)
+                    x = 0
+        else:
+            i = 0
+            while i <= len(hours):
+                if hours[i] > time.hour or hours[i] == time.hour and minutes[i] > time.minute:
+                    x = i
+                else:
+                    i += 1
+    resp = ''
+    resp += '\n<b>{}</b>\n'.format(weekdays[weekday])
+    zip(times_list, locations_list, lessons_list)
+    resp += '\n<b>{}</b>, {}, {}'.format(times_list[x], locations_list[x], lessons_list[x])
+    bot.send_message(message.chat.id, resp, parse_mode='HTML')
 
 
 @bot.message_handler(commands=['tomorrow'])
@@ -90,7 +125,7 @@ def get_tomorrow(message):
     web_page = get_page(group, week)
     soup = BeautifulSoup(web_page, "html5lib")
     day = str(weekday)+'day'
-    weekdays = {1:'Понедельник', 2:'Вторник', 3:'Среда', 4:'Четверг', 5:'Пятница', 6:'Суббота', 7:'Воскресенье'}
+    weekdays = {1: 'Понедельник', 2: 'Вторник', 3: 'Среда', 4: 'Четверг', 5: 'Пятница', 6: 'Суббота', 7: 'Воскресенье'}
     resp = ''
     times_list, locations_list, lessons_list = schedule(soup, day)
     while times_list is None:
@@ -113,7 +148,7 @@ def get_all_schedule(message):
     web_page = get_page(group, week)
     soup = BeautifulSoup(web_page, "html5lib")
     resp = ''
-    weekdays = {1:'Понедельник', 2:'Вторник', 3:'Среда', 4:'Четверг', 5:'Пятница', 6:'Суббота'}
+    weekdays = {1: 'Понедельник', 2: 'Вторник', 3: 'Среда', 4: 'Четверг', 5: 'Пятница', 6: 'Суббота'}
     for i in range(1, 7):
         day = str(i)+'day'
         resp += '\n<b>{}</b>\n'.format(weekdays[i])
