@@ -81,6 +81,12 @@ def get_near_lesson(message):
             weekday += 1
             if weekday > 7:
                 weekday = 1
+                if week == 1:
+                    week = 2
+                else:
+                    week = 1
+                web_page = get_page(group, week)
+                soup = BeautifulSoup(web_page, "html5lib")
             day = str(weekday)+'day'
             times_list, locations_list, lessons_list = schedule(soup, day)
             x = 0
