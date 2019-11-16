@@ -77,19 +77,7 @@ def get_near_lesson(message):
     weekdays = {1: 'Понедельник', 2: 'Вторник', 3: 'Среда', 4: 'Четверг', 5: 'Пятница', 6: 'Суббота', 7: 'Воскресенье'}
     times_list, locations_list, lessons_list = schedule(soup, day)
     if times_list is None:
-        while times_list is None:
-            weekday += 1
-            if weekday > 7:
-                weekday = 1
-                if week == 1:
-                    week = 2
-                else:
-                    week = 1
-                web_page = get_page(group, week)
-                soup = BeautifulSoup(web_page, "html5lib")
-            day = str(weekday)+'day'
-            times_list, locations_list, lessons_list = schedule(soup, day)
-            x = 0
+        resp = '\nСегодня пар больше нет\n'
     else:
         time = datetime.datetime.now().time()
         hours = []
@@ -98,17 +86,7 @@ def get_near_lesson(message):
             hours.append(int(times_list[i][0]+times_list[i][1]))
             minutes.append(int(times_list[i][3]+times_list[i][4]))
         if time.hour > hours[len(hours)-1] or time.hour == hours[len(hours)-1] and time.minute >= minutes[len(minutes)-1]:
-            weekday += 1
-            day = str(weekday)+'day'
-            times_list, locations_list, lessons_list = schedule(soup, day)
-            if times_list is None:
-                while times_list is None:
-                    weekday += 1
-                    if weekday > 7:
-                        weekday = 1
-                    day = str(weekday)+'day'
-                    times_list, locations_list, lessons_list = schedule(soup, day)
-                    x = 0
+            resp = '\nСегоня пар больше нет\n'
         else:
             i = 0
             while i < len(hours):
@@ -117,10 +95,10 @@ def get_near_lesson(message):
                     i = len(hours)
                 else:
                     i += 1
-    resp = ''
-    resp += '\n<b>{}</b>\n'.format(weekdays[weekday])
-    zip(times_list, locations_list, lessons_list)
-    resp += '\n<b>{}</b>, {}, {}'.format(times_list[x], locations_list[x], lessons_list[x])
+        resp = ''
+        resp += '\n<b>{}</b>\n'.format(weekdays[weekday])
+        zip(times_list, locations_list, lessons_list)
+        resp += '\n<b>{}</b>, {}, {}'.format(times_list[x], locations_list[x], lessons_list[x])
     bot.send_message(message.chat.id, resp, parse_mode='HTML')
 
 
