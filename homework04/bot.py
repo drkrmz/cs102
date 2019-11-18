@@ -31,9 +31,9 @@ def schedule(soup, day):
 
         locations_list = schedule_table.find_all("td", attrs={"class": "room"})
         locations_list = [room.span.text for room in locations_list]
-        
+
         rooms_list = schedule_table.find_all("dd", attrs={"class": "rasp_aud_mobile"})
-        rooms_list = [room.text + ',' if room.text != '' else room.text for room in rooms_list ]
+        rooms_list = [room.text + ',' if room.text != '' else room.text for room in rooms_list]
 
         lessons_list = schedule_table.find_all("td", attrs={"class": "lesson"})
         lessons_list = [lesson.text.split('\n\n') for lesson in lessons_list]
