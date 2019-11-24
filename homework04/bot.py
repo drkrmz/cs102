@@ -122,13 +122,13 @@ def get_near_lesson(message):
 def get_tomorrow(message):
     """ Получить расписание на следующий день """
     weekday = datetime.datetime.isoweekday(datetime.datetime.now())+1
+    _, group, week = message.text.split()
     if weekday > 7:
         weekday = 1
         if week == '1':
             week = '2'
         elif week == '2':
             week = '1'
-    _, group, week = message.text.split()
     week_number = {'0', '1', '2'}
     if week not in week_number:
         resp = '\nНеверный номер недели\n'
