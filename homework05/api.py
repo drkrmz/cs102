@@ -48,4 +48,9 @@ def get_friends(user_id, fields):
     assert isinstance(user_id, int), "user_id must be positive integer"
     assert isinstance(fields, str), "fields must be string"
     assert user_id > 0, "user_id must be positive integer"
-    # PUT YOUR CODE HERE
+    domain = config.VK_CONFIG['domain']
+    access_token = config.VK_CONFIG['access_token']
+    v = '5.103'
+    query = f"{domain}/friends.get?access_token={access_token}&user_id={user_id}&fields={fields}&v={v}"
+    response = get(query)
+    return response.json()
