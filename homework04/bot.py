@@ -9,7 +9,7 @@ telebot.apihelper.proxy = {'https': 'https://149.56.106.104:3128'}
 bot = telebot.TeleBot(config.access_token)
 
 
-def get_page(group, week):
+def get_page(group, week='0'):
     if week:
         week = str(week) + '/'
     url = '{domain}/{group}/{week}raspisanie_zanyatiy_{group}.htm'.format(
@@ -45,7 +45,13 @@ def schedule(soup, day):
 @bot.message_handler(commands=['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'])
 def get_schedule(message):
     """ Получить расписание на указанный день """
-    day, group, week = message.text.split()
+    msg = []
+    msg.extend(message.text.split())
+    if len(msg) == 2:
+        day, group = msg
+        week = '0'
+    else:
+        day, group, week = msg
     week_number = {'0', '1', '2'}
     if week not in week_number:
         resp = '\nНеверный номер недели\n'
@@ -81,7 +87,13 @@ def get_schedule(message):
 def get_near_lesson(message):
     """ Получить ближайшее занятие """
     weekday = datetime.datetime.isoweekday(datetime.datetime.now())
-    _, group, week = message.text.split()
+    msg = []
+    msg.extend(message.text.split())
+    if len(msg) == 2:
+        day, group = msg
+        week = '0'
+    else:
+        day, group, week = msg
     week_number = {'0', '1', '2'}
     if week not in week_number:
         resp = '\nНеверный номер недели\n'
@@ -122,7 +134,13 @@ def get_near_lesson(message):
 def get_tomorrow(message):
     """ Получить расписание на следующий день """
     weekday = datetime.datetime.isoweekday(datetime.datetime.now())+1
-    _, group, week = message.text.split()
+    msg = []
+    msg.extend(message.text.split())
+    if len(msg) == 2:
+        day, group = msg
+        week = '0'
+    else:
+        day, group, week = msg
     if weekday > 7:
         weekday = 1
         if week == '1':
@@ -162,7 +180,13 @@ def get_tomorrow(message):
 @bot.message_handler(commands=['all'])
 def get_all_schedule(message):
     """ Получить расписание на всю неделю для указанной группы """
-    _, group, week = message.text.split()
+    msg = []
+    msg.extend(message.text.split())
+    if len(msg) == 2:
+        day, group = msg
+        week = '0'
+    else:
+        day, group, week = msg
     week_number = {'0', '1', '2'}
     if week not in week_number:
         resp = '\nНеверный номер недели\n'
