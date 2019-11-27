@@ -53,4 +53,4 @@ def get_friends(user_id, fields):
     v = '5.103'
     query = f"{domain}/friends.get?access_token={access_token}&user_id={user_id}&fields={fields}&v={v}"
     response = get(query)
-    return response.json()
+    return response.json()['response']['items']

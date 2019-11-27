@@ -16,9 +16,9 @@ def age_predict(user_id: int) -> Optional[float]:
     assert user_id > 0, "user_id must be positive integer"
     friends = get_friends(user_id, 'bdate')
     ages = []
-    for i in range(friends['response']['count']):
+    for i in range(len(friends)):
         try:
-            bdate = friends['response']['items'][i]['bdate']
+            bdate = friends[i]['bdate']
         except KeyError:
             pass
         else:
@@ -31,4 +31,7 @@ def age_predict(user_id: int) -> Optional[float]:
                     ages.append(year - int(blist[2]))
                 else:
                     ages.append(year - int(blist[2]) - 1)
-    return median(ages)
+    if len(ages) == 0:
+        return None
+    else:
+        return median(ages)
