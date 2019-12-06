@@ -7,9 +7,10 @@ def get_network(users_ids, as_edgelist=True):
     edges = []
     for i in range(len(users_ids)):
         friends_list = get_friends(users_ids[i], '')
-        for j in range(i+1, len(users_ids)):
-            if users_ids[j] in friends_list:
-                edges.append((i, j))
+        if friends_list is not None:
+            for j in range(i+1, len(users_ids)):
+                if users_ids[j] in friends_list:
+                    edges.append((i, j))
     return edges
 
 

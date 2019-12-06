@@ -98,7 +98,7 @@ if __name__ == "__main__":
     mycorpus = [dictionary.doc2bow(doc) for doc in posts]
     lda_model = gensim.models.ldamodel.LdaModel(corpus=mycorpus,
                                            id2word=dictionary,
-                                           num_topics=3,
+                                           num_topics=5,
                                            random_state=100,
                                            update_every=1,
                                            chunksize=100,
