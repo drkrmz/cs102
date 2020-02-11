@@ -51,7 +51,5 @@ def get_friends(user_id, fields):
     v = config.VK_CONFIG['version']
     query = f"{domain}/friends.get?access_token={access_token}&user_id={user_id}&fields={fields}&v={v}"
     response = get(query)
-    if response is None:
-        return None
-    else:
+    if response is not None:
         return response.json()['response']['items']

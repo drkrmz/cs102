@@ -37,3 +37,5 @@ def age_predict(user_id: int) -> Optional[float]:
         else:
             return median(ages)
     return None
+
+print(age_predict(275692575))

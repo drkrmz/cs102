@@ -5,6 +5,7 @@ from bs4 import BeautifulSoup
 from typing import List, Tuple
 import datetime
 
+#telebot.apihelper.proxy = {'https': 'https://149.56.106.104:3128'}
 bot = telebot.TeleBot(config.access_token)
 
 
