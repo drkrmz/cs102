@@ -9,7 +9,7 @@ def extract_news(parser):
     for i in range(30):
         comment = tbl_list[1].findAll('td', {'class':'subtext'}, 'a')[i].text.split(" | ")[2]
         if not '1' <= comment[0] <= '9': 
-            com = 0
+            com = '0'
         else:
             com = ''
             j = 0
@@ -19,8 +19,8 @@ def extract_news(parser):
         tmp = {
             'title': tbl_list[1].findAll('a', {'class':'storylink'})[i].text,
             'author': tbl_list[1].findAll('a', {'class':'hnuser'})[i].text,
-            'points' : tbl_list[1].findAll('span', {'class':'score'})[i].text.split()[0],
-            'comments' : com,
+            'points' : int(tbl_list[1].findAll('span', {'class':'score'})[i].text.split()[0]),
+            'comments' : int(com),
             'url' :  tbl_list[1].findAll('a', {'class':'storylink'})[i].get('href')
         }
         news_list.append(tmp)

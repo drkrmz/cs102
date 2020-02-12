@@ -16,16 +16,29 @@ def news_list():
 
 @route("/add_label/")
 def add_label():
-    # PUT YOUR CODE HERE
+    ids = request.query.get("id")
+    labels = request.query.get("label")
+    s = session()
+    for item in s.query(News).filter(News.id == ids).all():
+        item.label = labels
+    s.commit()
     redirect("/news")
-    pass
 
 
 @route("/update")
 def update_news():
-    # PUT YOUR CODE HERE
+    news_lst = get_news('https://news.ycombinator.com/newest', 2)
+    s = session()
+    for i in range(len(news_lst)):
+        if len(s.query(News).filter(News.title == news_lst[i]['title'] and News.author == news_lst[i]['author']).all()) == 0:
+            new_news = News(title = news_lst[i]['title'],
+                            author = news_lst[i]['author'],
+                            points = news_lst[i]['points'],
+                            comments = news_lst[i]['comments'],
+                            url = news_lst[i]['url'])
+            s.add(new_news)
+    s.commit()
     redirect("/news")
-    pass
 
 
 @route("/classify")
