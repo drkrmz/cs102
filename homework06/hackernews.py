@@ -27,10 +27,10 @@ def add_label():
 
 @route("/update")
 def update_news():
-    news_lst = get_news('https://news.ycombinator.com/newest', 2)
+    news_lst = get_news('https://news.ycombinator.com/newest', 10)
     s = session()
     for i in range(len(news_lst)):
-        if len(s.query(News).filter(News.title == news_lst[i]['title'] and News.author == news_lst[i]['author']).all()) == 0:
+        if len(s.query(News).filter(News.title == news_lst[i]['title']).filter(News.author == news_lst[i]['author']).all()) == 0:
             new_news = News(title = news_lst[i]['title'],
                             author = news_lst[i]['author'],
                             points = news_lst[i]['points'],
@@ -48,5 +48,5 @@ def classify_news():
 
 
 if __name__ == "__main__":
-    run(host="localhost", port=8888)
+    run(host="localhost", port=8081)
 

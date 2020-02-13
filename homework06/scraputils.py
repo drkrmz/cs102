@@ -16,12 +16,15 @@ def extract_news(parser):
             while '1' <= comment[j] <= '9':
                 com = com + comment[j]
                 j += 1
+        url = tbl_list[1].findAll('a', {'class':'storylink'})[i].get('href')
+        if url[:4] == 'item':
+            url = 'https://news.ycombinator.com/' + url
         tmp = {
             'title': tbl_list[1].findAll('a', {'class':'storylink'})[i].text,
             'author': tbl_list[1].findAll('a', {'class':'hnuser'})[i].text,
             'points' : int(tbl_list[1].findAll('span', {'class':'score'})[i].text.split()[0]),
             'comments' : int(com),
-            'url' :  tbl_list[1].findAll('a', {'class':'storylink'})[i].get('href')
+            'url' :  url
         }
         news_list.append(tmp)
     return news_list
