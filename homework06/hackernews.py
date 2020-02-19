@@ -43,9 +43,16 @@ def update_news():
 
 @route("/classify")
 def classify_news():
-    # PUT YOUR CODE HERE
-    pass
+   """
+    def clean(s):
+    translator = str.maketrans("", "", string.punctuation)
+    return s.translate(translator)
 
+X = [clean(x).lower() for x in X]
+model = NaiveBayesClassifier()
+model.fit(X_train, y_train)
+print(model.score(X_test, y_test))
+"""
 
 if __name__ == "__main__":
     run(host="localhost", port=8080)
