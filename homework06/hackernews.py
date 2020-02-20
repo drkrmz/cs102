@@ -5,6 +5,7 @@ from bottle import (
 from scraputils import get_news
 from db import News, session
 from bayes import NaiveBayesClassifier
+import string
 
 
 @route("/news")
@@ -43,16 +44,31 @@ def update_news():
 
 @route("/classify")
 def classify_news():
-   """
-    def clean(s):
-    translator = str.maketrans("", "", string.punctuation)
-    return s.translate(translator)
+    X, y, info = [], [], []
+    s = session()
+    for i in range(1001):
+        for item in s.query(News).filter(News.id == i).all():
+            X.append(item.title)
+            y.append(item.label)
+    X_test = []
+    for i in range(1001, len(s.query(News).all()) + 1):
+        for item in s.query(News).filter(News.id == i).all():
+            X_test.append(item.title)
+            info.append(News(author = item.author,
+                             points = item.points,
+                             comments = item.comments,
+                             url = item.url))
+    X = [x.translate(str.maketrans("", "", string.punctuation)).lower() for x in X]
+    X_cleared = [x.translate(str.maketrans("", "", string.punctuation)).lower() for x in X_test]
+    model = NaiveBayesClassifier()
+    model.fit(X, y)
+    predicted_news = model.predict(X_test)
+    classified_news = []
+    for i in range(len(predicted_news)):
+        classified_news.append([y[i], X_test[i], info[i]])
+    classified_news.sort()
+    return template('homework06/news_recommendations', rows=classified_news)
 
-X = [clean(x).lower() for x in X]
-model = NaiveBayesClassifier()
-model.fit(X_train, y_train)
-print(model.score(X_test, y_test))
-"""
 
 if __name__ == "__main__":
     run(host="localhost", port=8080)
