@@ -11,7 +11,7 @@ import string
 @route("/news")
 def news_list():
     s = session()
-    rows = s.query(News).filter(News.label == None).all()
+    rows = s.query(News).filter(News.label is None).all()
     return template('homework06/news_template', rows=rows)
 
 
@@ -32,11 +32,11 @@ def update_news():
     s = session()
     for i in range(len(news_lst)):
         if len(s.query(News).filter(News.title == news_lst[i]['title']).filter(News.author == news_lst[i]['author']).all()) == 0:
-            new_news = News(title = news_lst[i]['title'],
-                            author = news_lst[i]['author'],
-                            points = news_lst[i]['points'],
-                            comments = news_lst[i]['comments'],
-                            url = news_lst[i]['url'])
+            new_news = News(title=news_lst[i]['title'],
+                            author=news_lst[i]['author'],
+                            points=news_lst[i]['points'],
+                            comments=news_lst[i]['comments'],
+                            url=news_lst[i]['url'])
             s.add(new_news)
     s.commit()
     redirect("/news")
@@ -54,10 +54,10 @@ def classify_news():
     for i in range(1001, len(s.query(News).all()) + 1):
         for item in s.query(News).filter(News.id == i).all():
             X_test.append(item.title)
-            info.append(News(author = item.author,
-                             points = item.points,
-                             comments = item.comments,
-                             url = item.url))
+            info.append(News(author=item.author,
+                             points=item.points,
+                             comments=item.comments,
+                             url=item.url))
     X = [x.translate(str.maketrans("", "", string.punctuation)).lower() for x in X]
     X_cleared = [x.translate(str.maketrans("", "", string.punctuation)).lower() for x in X_test]
     model = NaiveBayesClassifier(alpha=0.01)
@@ -66,10 +66,9 @@ def classify_news():
     classified_news = []
     for i in range(len(predicted_news)):
         classified_news.append([y[i], X_test[i], info[i]])
-    classified_news = sorted(classified_news, key = lambda item: item[0])
+    classified_news = sorted(classified_news, key=lambda item: item[0])
     return template('homework06/news_recommendations', rows=classified_news)
 
 
 if __name__ == "__main__":
     run(host="localhost", port=8080)
-
