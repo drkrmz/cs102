@@ -32,8 +32,9 @@
                 <tr>
                     <th colspan="7">
                         <a href="/update" class="ui right floated small primary button">I Wanna more Hacker News!</a>
+			<a href="/classify" class ="ui left floated small primary button">Classify News</a>
                     </th>
-                </tr>
+		</tr>
             </tfoot>
         </table>
         </div>

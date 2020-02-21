@@ -11,7 +11,7 @@ import string
 @route("/news")
 def news_list():
     s = session()
-    rows = s.query(News).filter(News.label is None).all()
+    rows = s.query(News).filter(News.label == None).all()
     return template('homework06/news_template', rows=rows)
 
 
