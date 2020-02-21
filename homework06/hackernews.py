@@ -60,13 +60,13 @@ def classify_news():
                              url = item.url))
     X = [x.translate(str.maketrans("", "", string.punctuation)).lower() for x in X]
     X_cleared = [x.translate(str.maketrans("", "", string.punctuation)).lower() for x in X_test]
-    model = NaiveBayesClassifier()
+    model = NaiveBayesClassifier(alpha=0.01)
     model.fit(X, y)
-    predicted_news = model.predict(X_test)
+    predicted_news = model.predict(X_cleared)
     classified_news = []
     for i in range(len(predicted_news)):
         classified_news.append([y[i], X_test[i], info[i]])
-    classified_news.sort()
+    classified_news = sorted(classified_news, key = lambda item: item[0])
     return template('homework06/news_recommendations', rows=classified_news)
 
 
