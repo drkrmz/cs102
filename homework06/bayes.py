@@ -20,7 +20,7 @@ class NaiveBayesClassifier:
         for i in range(len(X)):
             for word in X[i].split():
                 j = 0
-                while not y[i] in self.labels_list[j]:
+                while y[i] not in self.labels_list[j]:
                     j += 1
                 labeled_words[j].append(word)
         labels_count = []

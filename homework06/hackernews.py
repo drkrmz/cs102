@@ -31,9 +31,9 @@ def update_news():
     news_lst = get_news('https://news.ycombinator.com/newest', 5)
     s = session()
     for i in range(len(news_lst)):
-        if len(s.query(News).filter(News.title == news_lst[i]['title']).filter(News.author == news_lst[i]['author']).all()) == 0:
+        if len(s.query(News).filter(News.title == news_lst[i]['title'],News.author == news_lst[i]['author']).all()) == 0:
             new_news = News(title=news_lst[i]['title'],
-                            author=news_lst[i]['author'],
+                            author=news_lst[i].get('author'),
                             points=news_lst[i]['points'],
                             comments=news_lst[i]['comments'],
                             url=news_lst[i]['url'])
@@ -47,7 +47,7 @@ def classify_news():
     X, y, info = [], [], []
     s = session()
     for i in range(1001):
-        for item in s.query(News).filter(News.id == i).all():
+        for item in s.query(News).get(News.id == i):
             X.append(item.title)
             y.append(item.label)
     X_test = []
