@@ -1,7 +1,7 @@
 import psycopg2
 import csv
 
-conn = psycopg2.connect("host=localhost port=5433 dbname=odscourse user=postgres password=secret")
+conn = psycopg2.connect("host=localhost port=5432 dbname=odscourse user=postgres password=secret")
 cursor = conn.cursor()
 
 query = """
@@ -36,3 +36,7 @@ with open('homework11/athlete_events.csv', 'r') as f:
             [Id] + row
         )
 conn.commit()
+
+cursor.execute("SELECT * FROM telecom_churn LIMIT 5")
+records = cursor.fetchall()
+print(records)
