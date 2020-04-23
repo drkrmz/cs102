@@ -11,7 +11,7 @@ head(data)
 1. How old were the youngest male and female participants of the 1996 Olympics?
 
 — 16 and 15
-— 14 and 12
+— *14 and 12*
 — 16 and 12
 — 13 and 11
 
@@ -25,7 +25,7 @@ min(data$Age[data$Sex == 'F' & data$Year == 1996], na.rm = TRUE)
 Hint: here and further if needed drop duplicated sportsmen to count only unique ones.
 
 — 0.2
-— 1.5
+— *1.5*
 — 2.5
 — 7.7
 
@@ -41,7 +41,7 @@ round(male_gym / male_part * 100, 1)
 — 178.5 and 7.2
 — 179.4 and 10
 — 180.7 and 6.7
-— 182.4 and 9.1
+— *182.4 and 9.1*
 
 ```{r}
 round(mean(data$Height[data$Sex == 'F' & data$Sport == 'Basketball' & data$Year == 2000], na.rm = TRUE), 1)
@@ -51,7 +51,7 @@ round(sd(data$Height[data$Sex == 'F' & data$Sport == 'Basketball' & data$Year ==
 4. Find a sportsperson participated in the 2002 Olympics, with the highest weight among other participants of the same Olympics. What sport did he or she do?
 
 — Judo
-— Bobsleigh
+— *Bobsleigh*
 — Weightlifting
 — Boxing
 
@@ -66,7 +66,7 @@ sport[!is.na(sport)]
 — 0
 — 1
 — 2
-— 3
+— *3*
 
 ```{r}
 length(unique(data$Year[data$Name == 'Pawe Abratkiewicz']))
@@ -76,7 +76,7 @@ length(unique(data$Year[data$Name == 'Pawe Abratkiewicz']))
 
 — 0
 — 1
-— 2
+— *2*
 — 3
 
 ```{r}
@@ -86,7 +86,7 @@ length(unique(!is.na(n)))
 
 7. Is it true that Switzerland won fewer medals than Serbia at the 2016 Olympics? Do not consider NaN values in Medal column.
 
-— Yes
+— *Yes*
 — No
 
 ```{r}
@@ -99,7 +99,7 @@ if (Swtz < Srb) print('Yes') else print('No')
 
 8. What age category did the fewest and the most participants of the 2014 Olympics belong to?
 
-— [45-55] and [25-35) correspondingly
+— *[45-55] and [25-35) correspondingly*
 — [45-55] and [15-25) correspondingly
 — [35-45] and [25-35) correspondingly
 — [45-55] and [35-45) correspondingly
@@ -128,7 +128,7 @@ if (max(age_15, age_25, age_35) == age_35){
 
 — Yes, Yes
 — Yes, No
-— No, Yes
+— *No, Yes*
 — No, No
 
 ```{r}
@@ -149,7 +149,7 @@ if (length(data$ID[data$Season == 'Winter' & data$City == 'Sankt Moritz']) == 0)
 — 16
 — 24
 — 26
-— 34
+— *34*
 
 ```{r}
 abs(length(unique(data$Sport[data$Year == 1995])) - length(unique(data$Sport[data$Year == 2016])))

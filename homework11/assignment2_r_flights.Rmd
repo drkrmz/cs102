@@ -1,0 +1,185 @@
+---
+title: "assignment2_r_flights"
+output: html_document
+---
+
+```{r}
+library(tidyverse)
+library(descr)
+library(vcd)
+```
+
+```{r}
+data <- read.csv('2008.csv.bz2')
+head(data)
+```
+
+1. Find top-10 carriers in terms of the number of completed flights (UniqueCarrier column)?
+
+Which of the listed below is not in your top-10 list?
+
+— DL
+— AA
+— OO
+— *EV*
+
+```{r}
+fl <- select(data, UniqueCarrier, Cancelled)
+fl <- group_by(fl, UniqueCarrier)
+fl <- summarise(fl, total=sum(Cancelled, na.rm=TRUE))
+arrange(fl, desc(total))
+```
+
+
+2. Plot distributions of flight cancellation reasons (CancellationCode).
+
+What is the most frequent reason for flight cancellation? (Use this link to translate codes into reasons)
+
+— carrier
+— *weather conditions*
+— National Air System
+— security reasons
+
+```{r}
+fl <- group_by(select(data, CancellationCode), CancellationCode)
+fl <- count(fl)
+fl <- filter(fl, CancellationCode != '')
+reasons <- c('Carrier', 'Weather', 'National Air System', 'Security')
+barplot(fl$n, names.arg = reasons, col = 'lightblue')
+```
+
+
+3. Which route is the most frequent, in terms of the number of flights?
+
+(Take a look at 'Origin' and 'Dest' features. Consider A->B and B->A directions as different routes)
+
+— New-York – Washington
+— *San-Francisco – Los-Angeles*
+— San-Jose – Dallas
+— New-York – San-Francisco
+
+```{r}
+fl <- group_by(select(data, Origin, Dest), Origin, Dest)
+arrange(count(fl), desc(n))
+```
+
+
+4. Find top-5 delayed routes (count how many times they were delayed on departure). From all flights on these 5 routes, count all flights with weather conditions contributing to a delay.
+
+— 449
+— 539
+— 549
+— *668*
+
+```{r}
+fl <- filter(select(data, Origin, Dest, DepDelay, WeatherDelay), DepDelay > 0)
+fl <- group_by(fl, Origin, Dest)
+fl_1 <- filter(fl, WeatherDelay > 0)
+fl <- arrange(count(fl), desc(n))[1:5,]
+origin = paste(fl$Origin[1:5])
+dest = paste(fl$Dest[1:5])
+weather_delay <- 0
+for (i in (1:5)){
+  weather_delay <- weather_delay + length(fl_1$WeatherDelay[fl_1$Origin == origin[i] & fl_1$Dest == dest[i]])
+}
+weather_delay
+```
+
+
+
+5. Examine the hourly distribution of departure times. For that, create a new series from DepTime, removing missing values.
+
+Choose all correct statements:
+
+— Flights are normally distributed within time interval [0-23] (Search for: Normal distribution, bell curve).
+— Flights are uniformly distributed within time interval [0-23].
+— *In the period from 0 am to 4 am there are considerably less flights than from 7 pm to 8 pm.*
+
+```{r}
+hours <- na.omit(data$DepTime)
+hist(hours, col = 'pink')
+```
+
+
+
+6. Show how the number of flights changes through time (on the daily/weekly/monthly basis) and interpret the findings.
+
+Choose all correct statements:
+
+— *The number of flights during weekends is less than during weekdays (working days).*
+— The lowest number of flights is on Sunday.
+— *There are less flights during winter than during summer.*
+
+```{r}
+daily <- count(group_by(select(data, DayofMonth), DayofMonth))
+barplot(daily$n, col = 'lightgreen', names.arg = daily$DayofMonth)
+weekly <- count(group_by(select(data, DayOfWeek), DayOfWeek))
+days = c('Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat', 'Sun')
+barplot(weekly$n, col = 'violet', names.arg = days)
+monthly <- count(group_by(select(data, Month), Month))
+months = c('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec')
+barplot(monthly$n, col = 'lightyellow', names.arg = months)
+```
+
+
+7. Examine the distribution of cancellation reasons with time. Make a bar plot of cancellation reasons aggregated by months.
+
+Choose all correct statements:
+
+— *December has the highest rate of cancellations due to weather.*
+— The highest rate of cancellations in September is due to Security reasons.
+— *April's top cancellation reason is carriers.*
+— Flights cancellations due to National Air System are more frequent than those due to carriers.
+
+```{r}
+cancelcode <- filter(data, data$CancellationCode != '')
+args <- list(CancellationCode = c("", "Carr", "Wthr", "NAS", "Scrt"), Month = c('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'))
+mosaic(data = cancelcode, CancellationCode ~ Month, set_labels = args, rot_labels = 0)
+```
+
+
+8. Which month has the greatest number of cancellations due to Carrier?
+
+— May
+— January
+— September
+— *April*
+
+```{r}
+cancelcode <- filter(data, data$CancellationCode != '')
+args <- list(CancellationCode = c("", "Carr", "Wthr", "NAS", "Scrt"), Month = c('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'))
+mosaic(data = cancelcode, CancellationCode ~ Month, set_labels = args, rot_labels = 0)
+```
+
+
+
+9. Identify the carrier with the greatest number of cancellations due to carrier in the corresponding month from the previous question.
+
+— 9E
+— EV
+— HA
+— *AA*
+
+```{r}
+fl <- filter(data, data$Month == 3 & data$Cancelled == 1)
+fl <- count(group_by(select(fl, UniqueCarrier, Cancelled), UniqueCarrier))
+arrange(fl, desc(n))
+```
+
+
+
+10. Examine median arrival and departure delays (in time) by carrier. Which carrier has the lowest median delay time for both arrivals and departures? Leave only non-negative values of delay times ('ArrDelay', 'DepDelay'). Boxplots can be helpful in this exercise, as well as it might be a good idea to remove outliers in order to build nice graphs. You can exclude delay time values higher than a corresponding .95 percentile.
+
+— EV
+— OO
+— AA
+— *AQ*
+
+```{r}
+fl <- filter(data, data$ArrDelay > 0, data$DepDelay > 0)
+fl <- group_by(select(fl, UniqueCarrier, ArrDelay, DepDelay), UniqueCarrier)
+arr <- summarise(fl, total=median(ArrDelay, na.rm = TRUE))
+barplot(arr$total, names.arg = arr$UniqueCarrier, col = 'green')
+dep <- summarise(fl, total=median(DepDelay, na.rm = TRUE))
+barplot(dep$total, names.arg = dep$UniqueCarrier, col = 'yellow')
+```
